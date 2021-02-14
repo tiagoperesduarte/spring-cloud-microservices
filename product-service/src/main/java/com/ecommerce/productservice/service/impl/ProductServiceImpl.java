@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
@@ -32,6 +34,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product createProduct(Product product) {
         product.setId(null);
+        product.setCreatedOn(LocalDateTime.now());
+
         return productRepository.save(product);
     }
 

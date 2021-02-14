@@ -1,14 +1,9 @@
 version: '3'
 
 services:
-  db:
+  mongo:
     image: mongo:4.2.8
     ports:
       - 27017:27017
     volumes:
       - ./docker/data/db:/data/db
-      - ./docker/db-init.js:/docker-entrypoint-initdb.d/db-init.js
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: microservices
-      MONGO_INITDB_ROOT_PASSWORD: microservices
-      MONGO_INITDB_DATABASE: api

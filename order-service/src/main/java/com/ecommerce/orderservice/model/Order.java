@@ -4,7 +4,7 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -14,7 +14,7 @@ public class Order {
     private String id;
 
     private List<OrderItem> items;
-    private String comment;
     private double total;
-    private Date createdOn;
+    private OrderStatus status;
+    private LocalDateTime createdOn;
 }
