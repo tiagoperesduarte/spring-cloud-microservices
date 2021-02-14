@@ -1,11 +1,11 @@
 package com.ecommerce.productservice.service;
 
 import com.ecommerce.productservice.model.Product;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ProductService {
-    List<Product> getProducts();
+    Page<Product> getProducts(Pageable pageable);
 
     Product getProductById(String id);
 

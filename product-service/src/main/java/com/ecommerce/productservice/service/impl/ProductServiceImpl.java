@@ -1,13 +1,13 @@
 package com.ecommerce.productservice.service.impl;
 
-import com.ecommerce.productservice.model.Product;
 import com.ecommerce.productservice.exception.ResourceNotFoundException;
+import com.ecommerce.productservice.model.Product;
 import com.ecommerce.productservice.repository.ProductRepository;
 import com.ecommerce.productservice.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -19,8 +19,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getProducts() {
-        return productRepository.findAll();
+    public Page<Product> getProducts(Pageable pageable) {
+        return productRepository.findAll(pageable);
     }
 
     @Override
