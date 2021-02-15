@@ -1,6 +1,8 @@
 package com.ecommerce.productservice.service.impl;
 
 import com.ecommerce.productservice.exception.ResourceNotFoundException;
+import com.ecommerce.productservice.integration.queue.ProductProducer;
+import com.ecommerce.productservice.integration.queue.mapper.ProductMessageMapper;
 import com.ecommerce.productservice.model.Product;
 import com.ecommerce.productservice.repository.ProductRepository;
 import com.ecommerce.productservice.service.ProductService;
@@ -14,10 +16,18 @@ import java.time.LocalDateTime;
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
+    private final ProductProducer productProducer;
+    private final ProductMessageMapper productMessageMapper;
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository) {
+    public ProductServiceImpl(
+            ProductRepository productRepository,
+            ProductProducer productProducer,
+            ProductMessageMapper productMessageMapper
+    ) {
         this.productRepository = productRepository;
+        this.productProducer = productProducer;
+        this.productMessageMapper = productMessageMapper;
     }
 
     @Override
@@ -36,7 +46,10 @@ public class ProductServiceImpl implements ProductService {
         product.setId(null);
         product.setCreatedOn(LocalDateTime.now());
 
-        return productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
+        productProducer.sendProductSaveMessage(productMessageMapper.toDto(savedProduct));
+
+        return savedProduct;
     }
 
     @Override
@@ -46,7 +59,10 @@ public class ProductServiceImpl implements ProductService {
         }
 
         product.setId(id);
-        return productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
+        productProducer.sendProductSaveMessage(productMessageMapper.toDto(savedProduct));
+
+        return savedProduct;
     }
 
     @Override

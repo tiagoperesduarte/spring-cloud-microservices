@@ -2,8 +2,15 @@ version: '3'
 
 services:
   mongo:
-    image: mongo:4.2.8
+    image: mongo:4.2.12
     ports:
       - 27017:27017
-    volumes:
-      - ./docker/data/db:/data/db
+
+  rabbitmq:
+    image: rabbitmq:3.8.11-management
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: 'admin'
+      RABBITMQ_DEFAULT_PASS: 'admin'
