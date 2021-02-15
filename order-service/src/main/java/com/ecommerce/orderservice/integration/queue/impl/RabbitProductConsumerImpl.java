@@ -1,5 +1,6 @@
-package com.ecommerce.orderservice.integration.queue;
+package com.ecommerce.orderservice.integration.queue.impl;
 
+import com.ecommerce.orderservice.integration.queue.ProductConsumer;
 import com.ecommerce.orderservice.integration.queue.dto.ProductMessageDto;
 import com.ecommerce.orderservice.integration.queue.mapper.ProductMessageMapper;
 import com.ecommerce.orderservice.service.ProductService;
@@ -11,12 +12,12 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class RabbitProductConsumer implements ProductConsumer {
+public class RabbitProductConsumerImpl implements ProductConsumer {
     private final ProductService productService;
     private final ProductMessageMapper productMessageMapper;
 
     @Autowired
-    public RabbitProductConsumer(ProductService productService, ProductMessageMapper productMessageMapper) {
+    public RabbitProductConsumerImpl(ProductService productService, ProductMessageMapper productMessageMapper) {
         this.productService = productService;
         this.productMessageMapper = productMessageMapper;
     }

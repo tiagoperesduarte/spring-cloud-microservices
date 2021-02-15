@@ -1,5 +1,6 @@
-package com.ecommerce.productservice.integration.queue;
+package com.ecommerce.productservice.integration.queue.impl;
 
+import com.ecommerce.productservice.integration.queue.ProductProducer;
 import com.ecommerce.productservice.integration.queue.dto.ProductMessageDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class RabbitProductProducer implements ProductProducer {
+public class RabbitProductProducerImpl implements ProductProducer {
     private final RabbitTemplate rabbitTemplate;
 
     @Value("${ecommerce.rabbitmq.exchange}")
@@ -20,7 +21,7 @@ public class RabbitProductProducer implements ProductProducer {
     @Value("${ecommerce.rabbitmq.productdelete.routingkey}")
     private String productDeleteRoutingKey;
 
-    public RabbitProductProducer(RabbitTemplate rabbitTemplate) {
+    public RabbitProductProducerImpl(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
     }
 
