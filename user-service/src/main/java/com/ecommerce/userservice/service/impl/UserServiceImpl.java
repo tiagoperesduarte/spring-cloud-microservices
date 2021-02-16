@@ -2,13 +2,14 @@ package com.ecommerce.userservice.service.impl;
 
 import com.ecommerce.userservice.exception.UserAlreadyExistsException;
 import com.ecommerce.userservice.exception.UserNotFoundException;
+import com.ecommerce.userservice.integration.queue.UserProducer;
+import com.ecommerce.userservice.integration.queue.mapper.UserMessageMapper;
 import com.ecommerce.userservice.model.User;
 import com.ecommerce.userservice.repository.UserRepository;
 import com.ecommerce.userservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,12 +17,18 @@ import java.time.LocalDateTime;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final UserProducer userProducer;
+    private final UserMessageMapper userMessageMapper;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(
+            UserRepository userRepository,
+            UserProducer userProducer,
+            UserMessageMapper userMessageMapper
+    ) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+        this.userProducer = userProducer;
+        this.userMessageMapper = userMessageMapper;
     }
 
     @Override
@@ -42,10 +49,11 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setId(null);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setCreatedOn(LocalDateTime.now());
+        User savedUser = userRepository.save(user);
+        userProducer.sendUserSaveMessage(userMessageMapper.toDto(savedUser));
 
-        return userRepository.save(user);
+        return savedUser;
     }
 
     @Override
@@ -59,9 +67,10 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setId(id);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User savedUser = userRepository.save(user);
+        userProducer.sendUserSaveMessage(userMessageMapper.toDto(savedUser));
 
-        return userRepository.save(user);
+        return savedUser;
     }
 
     @Override
