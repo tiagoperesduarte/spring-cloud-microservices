@@ -1,6 +1,6 @@
 package com.ecommerce.orderservice.service.impl;
 
-import com.ecommerce.orderservice.exception.ResourceNotFoundException;
+import com.ecommerce.orderservice.exception.OrderNotFoundException;
 import com.ecommerce.orderservice.model.Order;
 import com.ecommerce.orderservice.model.OrderStatus;
 import com.ecommerce.orderservice.repository.OrderRepository;
@@ -29,7 +29,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order getOrderById(String id) {
         return orderRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id " + id));
+                .orElseThrow(() -> new OrderNotFoundException("Order not found with id " + id));
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.ecommerce.productservice.service.impl;
 
-import com.ecommerce.productservice.exception.ResourceNotFoundException;
+import com.ecommerce.productservice.exception.ProductNotFoundException;
 import com.ecommerce.productservice.integration.queue.ProductProducer;
 import com.ecommerce.productservice.integration.queue.mapper.ProductMessageMapper;
 import com.ecommerce.productservice.model.Product;
@@ -38,7 +38,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product getProductById(String id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id " + id));
+                .orElseThrow(() -> new ProductNotFoundException("Product not found with id " + id));
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product updateProduct(String id, Product product) {
         if (!productRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Product not found with id " + id);
+            throw new ProductNotFoundException("Product not found with id " + id);
         }
 
         product.setId(id);
@@ -68,7 +68,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProductById(String id) {
         if (!productRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Product not found with id " + id);
+            throw new ProductNotFoundException("Product not found with id " + id);
         }
 
         productRepository.deleteById(id);
