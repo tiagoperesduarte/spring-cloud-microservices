@@ -1,10 +1,9 @@
-package com.ecommerce.userservice.controller.dto;
+package com.ecommerce.authservice.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 public class UserDto {
@@ -15,6 +14,5 @@ public class UserDto {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    private List<UserAddressDto> addresses;
     private LocalDateTime createdOn;
 }

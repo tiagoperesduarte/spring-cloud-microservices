@@ -1,9 +1,9 @@
-package com.ecommerce.userservice.controller;
+package com.ecommerce.authservice.controller;
 
-import com.ecommerce.userservice.controller.dto.UserDto;
-import com.ecommerce.userservice.controller.mapper.UserMapper;
-import com.ecommerce.userservice.model.User;
-import com.ecommerce.userservice.service.UserService;
+import com.ecommerce.authservice.controller.dto.UserDto;
+import com.ecommerce.authservice.controller.mapper.UserMapper;
+import com.ecommerce.authservice.model.User;
+import com.ecommerce.authservice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

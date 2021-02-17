@@ -1,7 +1,7 @@
-package com.ecommerce.userservice.controller.mapper;
+package com.ecommerce.authservice.controller.mapper;
 
-import com.ecommerce.userservice.controller.dto.UserDto;
-import com.ecommerce.userservice.model.User;
+import com.ecommerce.authservice.controller.dto.UserDto;
+import com.ecommerce.authservice.model.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
