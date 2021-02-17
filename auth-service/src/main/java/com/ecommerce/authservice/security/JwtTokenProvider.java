@@ -7,7 +7,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -29,9 +28,9 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(String id, String username) {
-        Claims claims = Jwts.claims().setSubject(username);
-        claims.put("id", id);
+    public String createToken(CurrentUser currentUser) {
+        Claims claims = Jwts.claims().setSubject(currentUser.getId());
+        claims.put("username", currentUser.getUsername());
 
         Instant now = Instant.now();
         Instant validity = now.plusMillis(expirationInMillis);
@@ -44,7 +43,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String getUsername(String token) {
+    public String getId(String token) {
         return Jwts.parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)
@@ -52,12 +51,12 @@ public class JwtTokenProvider {
                 .getSubject();
     }
 
-    public String getId(String token) {
+    public String getUsername(String token) {
         return (String) Jwts.parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)
                 .getBody()
-                .get("id");
+                .get("username");
     }
 
     public boolean validateToken(String token) {
@@ -82,8 +81,8 @@ public class JwtTokenProvider {
     public Authentication getAuthentication(String token) {
         String id = getId(token);
         String username = getUsername(token);
-        UserDetails userDetails = new UserDetailsImpl(id, username);
+        CurrentUser currentUser = new CurrentUser(id, username);
 
-        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(currentUser, null, currentUser.getAuthorities());
     }
 }

@@ -1,4 +1,4 @@
-package com.ecommerce.userservice.security;
+package com.ecommerce.productservice.security;
 
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;

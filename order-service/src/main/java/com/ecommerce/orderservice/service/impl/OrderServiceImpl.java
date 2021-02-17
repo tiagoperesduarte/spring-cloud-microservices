@@ -4,6 +4,7 @@ import com.ecommerce.orderservice.exception.OrderNotFoundException;
 import com.ecommerce.orderservice.model.Order;
 import com.ecommerce.orderservice.model.OrderStatus;
 import com.ecommerce.orderservice.repository.OrderRepository;
+import com.ecommerce.orderservice.security.CurrentUser;
 import com.ecommerce.orderservice.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,18 +24,25 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Page<Order> getOrders(Pageable pageable) {
-        return orderRepository.findAll(pageable);
+        CurrentUser currentUser = CurrentUser.fromContext();
+
+        return orderRepository.findAllByUserId(currentUser.getId(), pageable);
     }
 
     @Override
     public Order getOrderById(String id) {
-        return orderRepository.findById(id)
+        CurrentUser currentUser = CurrentUser.fromContext();
+
+        return orderRepository.findByIdAndUserId(id, currentUser.getId())
                 .orElseThrow(() -> new OrderNotFoundException("Order not found with id " + id));
     }
 
     @Override
     public Order createOrder(Order order) {
+        CurrentUser currentUser = CurrentUser.fromContext();
+
         order.setId(null);
+        order.setUserId(currentUser.getId());
         order.setTotal(getOrderTotal(order));
         order.setStatus(OrderStatus.PENDING);
         order.setCreatedOn(LocalDateTime.now());

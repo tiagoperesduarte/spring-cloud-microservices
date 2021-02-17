@@ -1,7 +1,7 @@
 package com.ecommerce.authservice.service.impl;
 
+import com.ecommerce.authservice.security.CurrentUser;
 import com.ecommerce.authservice.security.JwtTokenProvider;
-import com.ecommerce.authservice.security.UserDetailsImpl;
 import com.ecommerce.authservice.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,7 +29,7 @@ public class AuthServiceImpl implements AuthService {
                 )
         );
 
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        return jwtTokenProvider.createToken(userDetails.getId(), userDetails.getUsername());
+        CurrentUser currentUser = (CurrentUser) authentication.getPrincipal();
+        return jwtTokenProvider.createToken(currentUser);
     }
 }

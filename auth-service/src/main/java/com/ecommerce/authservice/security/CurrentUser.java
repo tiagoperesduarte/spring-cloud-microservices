@@ -1,14 +1,16 @@
-package com.ecommerce.userservice.security;
+package com.ecommerce.authservice.security;
 
 import lombok.Getter;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
 
 @Getter
-public class UserDetailsImpl implements UserDetails {
+public class CurrentUser implements UserDetails {
     private final String id;
     private final String username;
 
@@ -19,11 +21,11 @@ public class UserDetailsImpl implements UserDetails {
     private final boolean credentialsNonExpired;
     private final boolean enabled;
 
-    public UserDetailsImpl(String id, String username) {
+    public CurrentUser(String id, String username) {
         this(id, username, null);
     }
 
-    public UserDetailsImpl(String id, String username, String password) {
+    public CurrentUser(String id, String username, String password) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -33,5 +35,14 @@ public class UserDetailsImpl implements UserDetails {
         this.accountNonLocked = true;
         this.credentialsNonExpired = true;
         this.enabled = true;
+    }
+
+    public static CurrentUser fromContext() {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            return (CurrentUser) authentication.getPrincipal();
+        } catch (Exception ex) {
+            throw new InvalidJwtException("Expired or invalid JWT token");
+        }
     }
 }

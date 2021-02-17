@@ -13,6 +13,7 @@ public class Order {
     @Id
     private String id;
 
+    private String userId;
     private List<OrderItem> items;
     private double total;
     private OrderStatus status;

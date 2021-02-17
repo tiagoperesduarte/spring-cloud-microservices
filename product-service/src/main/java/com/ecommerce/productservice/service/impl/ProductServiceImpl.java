@@ -5,6 +5,7 @@ import com.ecommerce.productservice.integration.queue.ProductProducer;
 import com.ecommerce.productservice.integration.queue.mapper.ProductMessageMapper;
 import com.ecommerce.productservice.model.Product;
 import com.ecommerce.productservice.repository.ProductRepository;
+import com.ecommerce.productservice.security.CurrentUser;
 import com.ecommerce.productservice.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,18 +33,25 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Page<Product> getProducts(Pageable pageable) {
-        return productRepository.findAll(pageable);
+        CurrentUser currentUser = CurrentUser.fromContext();
+
+        return productRepository.findAllByUserId(currentUser.getId(), pageable);
     }
 
     @Override
     public Product getProductById(String id) {
-        return productRepository.findById(id)
+        CurrentUser currentUser = CurrentUser.fromContext();
+
+        return productRepository.findByIdAndUserId(id, currentUser.getId())
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with id " + id));
     }
 
     @Override
     public Product createProduct(Product product) {
+        CurrentUser currentUser = CurrentUser.fromContext();
+
         product.setId(null);
+        product.setUserId(currentUser.getId());
         product.setCreatedOn(LocalDateTime.now());
 
         Product savedProduct = productRepository.save(product);
@@ -54,7 +62,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product updateProduct(String id, Product product) {
-        if (!productRepository.existsById(id)) {
+        CurrentUser currentUser = CurrentUser.fromContext();
+
+        if (!productRepository.existsByIdAndUserId(id, currentUser.getId())) {
             throw new ProductNotFoundException("Product not found with id " + id);
         }
 
@@ -67,7 +77,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProductById(String id) {
-        if (!productRepository.existsById(id)) {
+        CurrentUser currentUser = CurrentUser.fromContext();
+
+        if (!productRepository.existsByIdAndUserId(id, currentUser.getId())) {
             throw new ProductNotFoundException("Product not found with id " + id);
         }
 

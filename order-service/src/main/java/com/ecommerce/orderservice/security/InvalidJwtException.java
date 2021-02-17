@@ -1,4 +1,4 @@
-package com.ecommerce.authservice.security;
+package com.ecommerce.orderservice.security;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
