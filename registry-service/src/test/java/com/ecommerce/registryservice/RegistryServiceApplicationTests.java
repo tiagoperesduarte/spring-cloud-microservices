@@ -1,10 +1,10 @@
-package com.ecommerce.discoveryservice;
+package com.ecommerce.registryservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DiscoveryServiceApplicationTests {
+class RegistryServiceApplicationTests {
     @Test
     void contextLoads() {
     }
