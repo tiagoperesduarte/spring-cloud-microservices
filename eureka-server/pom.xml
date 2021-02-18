@@ -11,10 +11,10 @@
     </parent>
 
     <groupId>com.ecommerce</groupId>
-    <artifactId>registry-service</artifactId>
+    <artifactId>eureka-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>registry-service</name>
+    <name>eureka-server</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>

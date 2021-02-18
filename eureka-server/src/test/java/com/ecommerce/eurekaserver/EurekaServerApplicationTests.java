@@ -1,10 +1,10 @@
-package com.ecommerce.registryservice;
+package com.ecommerce.eurekaserver;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class RegistryServiceApplicationTests {
+class EurekaServerApplicationTests {
     @Test
     void contextLoads() {
     }
