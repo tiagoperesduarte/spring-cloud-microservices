@@ -3,5 +3,7 @@ package com.ecommerce.orderservice.service;
 import com.ecommerce.orderservice.model.Product;
 
 public interface ProductService {
+    Product getProductById(String id);
+
     Product saveProduct(Product product);
 }

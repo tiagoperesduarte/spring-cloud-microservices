@@ -1,5 +1,6 @@
 package com.ecommerce.orderservice.service.impl;
 
+import com.ecommerce.orderservice.exception.ProductNotFoundException;
 import com.ecommerce.orderservice.model.Product;
 import com.ecommerce.orderservice.repository.ProductRepository;
 import com.ecommerce.orderservice.service.ProductService;
@@ -9,6 +10,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
+
+    @Override
+    public Product getProductById(String id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found with id " + id));
+    }
 
     @Autowired
     public ProductServiceImpl(ProductRepository productRepository) {

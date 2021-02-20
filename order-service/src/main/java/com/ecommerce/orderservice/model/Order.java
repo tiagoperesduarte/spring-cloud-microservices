@@ -14,6 +14,7 @@ public class Order {
     private String id;
 
     private String userId;
+    private ShippingAddress shippingAddress;
     private List<OrderItem> items;
     private double total;
     private OrderStatus status;

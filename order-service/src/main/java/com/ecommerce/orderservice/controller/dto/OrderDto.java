@@ -9,6 +9,7 @@ import java.util.List;
 @Data
 public class OrderDto {
     private String id;
+    private ShippingAddressDto shippingAddress;
     private List<OrderItemDto> items;
     private double total;
     private OrderStatus status;
