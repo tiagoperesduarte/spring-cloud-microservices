@@ -1,0 +1,135 @@
+{
+  "rabbit_version": "3.8.11",
+  "rabbitmq_version": "3.8.11",
+  "product_name": "RabbitMQ",
+  "product_version": "3.8.11",
+  "users": [
+    {
+      "name": "admin",
+      "password_hash": "51OHunFDQWGt1j7mZwqy75EGkqK8EBPJPbxssA6t+BMnFx70",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": "administrator",
+      "limits": {}
+    }
+  ],
+  "vhosts": [
+    {
+      "name": "/"
+    }
+  ],
+  "permissions": [
+    {
+      "user": "admin",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+  "topic_permissions": [],
+  "parameters": [],
+  "global_parameters": [
+    {
+      "name": "cluster_name",
+      "value": "rabbit@229004e57e2f"
+    },
+    {
+      "name": "internal_cluster_id",
+      "value": "rabbitmq-cluster-id-C77mderHOkDsk8tMGHjLgw"
+    }
+  ],
+  "policies": [],
+  "queues": [
+    {
+      "name": "productdelete.orderservice.queue",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "productsave.orderservice.queue",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "userdelete.orderservice.queue",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "userdelete.productservice.queue",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    }
+  ],
+  "exchanges": [
+    {
+      "name": "productsave.exchange",
+      "vhost": "/",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "productdelete.exchange",
+      "vhost": "/",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "userdelete.exchange",
+      "vhost": "/",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    }
+  ],
+  "bindings": [
+    {
+      "source": "productdelete.exchange",
+      "vhost": "/",
+      "destination": "productdelete.orderservice.queue",
+      "destination_type": "queue",
+      "routing_key": "productdelete.routingkey",
+      "arguments": {}
+    },
+    {
+      "source": "productsave.exchange",
+      "vhost": "/",
+      "destination": "productsave.orderservice.queue",
+      "destination_type": "queue",
+      "routing_key": "productsave.routingkey",
+      "arguments": {}
+    },
+    {
+      "source": "userdelete.exchange",
+      "vhost": "/",
+      "destination": "userdelete.orderservice.queue",
+      "destination_type": "queue",
+      "routing_key": "userdelete.routingkey",
+      "arguments": {}
+    },
+    {
+      "source": "userdelete.exchange",
+      "vhost": "/",
+      "destination": "userdelete.productservice.queue",
+      "destination_type": "queue",
+      "routing_key": "userdelete.routingkey",
+      "arguments": {}
+    }
+  ]
+}
