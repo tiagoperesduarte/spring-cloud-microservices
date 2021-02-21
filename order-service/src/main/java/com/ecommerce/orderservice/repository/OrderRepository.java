@@ -13,4 +13,6 @@ public interface OrderRepository extends PagingAndSortingRepository<Order, Strin
     Page<Order> findAllByUserId(String userId, Pageable pageable);
 
     Optional<Order> findByIdAndUserId(String id, String userId);
+
+    void deleteAllByUserId(String userId);
 }

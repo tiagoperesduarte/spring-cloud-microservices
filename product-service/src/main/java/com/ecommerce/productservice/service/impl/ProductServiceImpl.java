@@ -1,8 +1,8 @@
 package com.ecommerce.productservice.service.impl;
 
 import com.ecommerce.productservice.exception.ProductNotFoundException;
-import com.ecommerce.productservice.integration.queue.ProductProducer;
-import com.ecommerce.productservice.integration.queue.mapper.ProductMessageMapper;
+import com.ecommerce.productservice.integration.event.producer.product.DeletedProductEventProducer;
+import com.ecommerce.productservice.integration.event.producer.product.SavedProductEventProducer;
 import com.ecommerce.productservice.model.Product;
 import com.ecommerce.productservice.repository.ProductRepository;
 import com.ecommerce.productservice.security.CurrentUser;
@@ -17,18 +17,18 @@ import java.time.LocalDateTime;
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
-    private final ProductProducer productProducer;
-    private final ProductMessageMapper productMessageMapper;
+    private final SavedProductEventProducer savedProductEventProducer;
+    private final DeletedProductEventProducer deletedProductEventProducer;
 
     @Autowired
     public ProductServiceImpl(
             ProductRepository productRepository,
-            ProductProducer productProducer,
-            ProductMessageMapper productMessageMapper
+            SavedProductEventProducer savedProductEventProducer,
+            DeletedProductEventProducer deletedProductEventProducer
     ) {
         this.productRepository = productRepository;
-        this.productProducer = productProducer;
-        this.productMessageMapper = productMessageMapper;
+        this.savedProductEventProducer = savedProductEventProducer;
+        this.deletedProductEventProducer = deletedProductEventProducer;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ProductServiceImpl implements ProductService {
         product.setCreatedOn(LocalDateTime.now());
 
         Product savedProduct = productRepository.save(product);
-        productProducer.sendProductSaveMessage(productMessageMapper.toDto(savedProduct));
+        savedProductEventProducer.sendMessage(savedProduct);
 
         return savedProduct;
     }
@@ -70,7 +70,7 @@ public class ProductServiceImpl implements ProductService {
 
         product.setId(id);
         Product savedProduct = productRepository.save(product);
-        productProducer.sendProductSaveMessage(productMessageMapper.toDto(savedProduct));
+        savedProductEventProducer.sendMessage(savedProduct);
 
         return savedProduct;
     }
@@ -84,5 +84,11 @@ public class ProductServiceImpl implements ProductService {
         }
 
         productRepository.deleteById(id);
+        deletedProductEventProducer.sendMessage(id);
+    }
+
+    @Override
+    public void deleteProductsByUserId(String userId) {
+        productRepository.deleteAllByUserId(userId);
     }
 }

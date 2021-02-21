@@ -10,6 +10,7 @@ public class Product {
     @Id
     private String id;
 
+    private String userId;
     private double quantity;
     private double price;
 }

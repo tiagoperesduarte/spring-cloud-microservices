@@ -15,4 +15,6 @@ public interface ProductRepository extends PagingAndSortingRepository<Product, S
     Optional<Product> findByIdAndUserId(String id, String userId);
 
     boolean existsByIdAndUserId(String id, String userId);
+
+    void deleteAllByUserId(String userId);
 }

@@ -1,9 +1,9 @@
-package com.ecommerce.orderservice.integration.queue.dto;
+package com.ecommerce.productservice.integration.event.producer.product.dto;
 
 import lombok.Data;
 
 @Data
-public class ProductMessageDto {
+public class ProductDto {
     private String id;
     private double quantity;
     private double price;

@@ -57,6 +57,11 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.save(order);
     }
 
+    @Override
+    public void deleteOrdersByUserId(String userId) {
+        orderRepository.deleteAllByUserId(userId);
+    }
+
     private void populateOrderItemPriceAndValidateStock(Order order) {
         order.getItems().forEach(item -> {
             Product product = productService.getProductById(item.getProductId());

@@ -6,4 +6,8 @@ public interface ProductService {
     Product getProductById(String id);
 
     Product saveProduct(Product product);
+
+    void deleteProductById(String id);
+
+    void deleteProductsByUserId(String userId);
 }
