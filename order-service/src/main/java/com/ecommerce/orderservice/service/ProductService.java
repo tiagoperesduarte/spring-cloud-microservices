@@ -8,6 +8,4 @@ public interface ProductService {
     Product saveProduct(Product product);
 
     void deleteProductById(String id);
-
-    void deleteProductsByUserId(String userId);
 }

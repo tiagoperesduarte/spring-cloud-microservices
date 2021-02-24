@@ -2,7 +2,6 @@ package com.ecommerce.authservice.service.impl;
 
 import com.ecommerce.authservice.exception.UserAlreadyExistsException;
 import com.ecommerce.authservice.exception.UserNotFoundException;
-import com.ecommerce.authservice.integration.event.producer.DeletedUserEventProducer;
 import com.ecommerce.authservice.model.User;
 import com.ecommerce.authservice.repository.UserRepository;
 import com.ecommerce.authservice.service.UserService;
@@ -17,13 +16,11 @@ import java.time.LocalDateTime;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final DeletedUserEventProducer deletedUserEventProducer;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, DeletedUserEventProducer deletedUserEventProducer, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.deletedUserEventProducer = deletedUserEventProducer;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -74,6 +71,5 @@ public class UserServiceImpl implements UserService {
         }
 
         userRepository.deleteById(id);
-        deletedUserEventProducer.sendMessage(id);
     }
 }

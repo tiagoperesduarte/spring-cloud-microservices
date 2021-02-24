@@ -10,6 +10,4 @@ public interface OrderService {
     Order getOrderById(String id);
 
     Order createOrder(Order order);
-
-    void deleteOrdersByUserId(String userId);
 }

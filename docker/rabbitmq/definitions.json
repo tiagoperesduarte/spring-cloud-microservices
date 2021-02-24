@@ -53,20 +53,6 @@
       "durable": true,
       "auto_delete": false,
       "arguments": {}
-    },
-    {
-      "name": "userdelete.orderservice.queue",
-      "vhost": "/",
-      "durable": true,
-      "auto_delete": false,
-      "arguments": {}
-    },
-    {
-      "name": "userdelete.productservice.queue",
-      "vhost": "/",
-      "durable": true,
-      "auto_delete": false,
-      "arguments": {}
     }
   ],
   "exchanges": [
@@ -81,15 +67,6 @@
     },
     {
       "name": "productdelete.exchange",
-      "vhost": "/",
-      "type": "direct",
-      "durable": true,
-      "auto_delete": false,
-      "internal": false,
-      "arguments": {}
-    },
-    {
-      "name": "userdelete.exchange",
       "vhost": "/",
       "type": "direct",
       "durable": true,
@@ -113,22 +90,6 @@
       "destination": "productsave.orderservice.queue",
       "destination_type": "queue",
       "routing_key": "productsave.routingkey",
-      "arguments": {}
-    },
-    {
-      "source": "userdelete.exchange",
-      "vhost": "/",
-      "destination": "userdelete.orderservice.queue",
-      "destination_type": "queue",
-      "routing_key": "userdelete.routingkey",
-      "arguments": {}
-    },
-    {
-      "source": "userdelete.exchange",
-      "vhost": "/",
-      "destination": "userdelete.productservice.queue",
-      "destination_type": "queue",
-      "routing_key": "userdelete.routingkey",
       "arguments": {}
     }
   ]

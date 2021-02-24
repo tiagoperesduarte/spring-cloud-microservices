@@ -1,6 +1,5 @@
-package com.ecommerce.productservice.integration.event.producer.product.impl;
+package com.ecommerce.productservice.integration.event.product;
 
-import com.ecommerce.productservice.integration.event.producer.product.SavedProductEventProducer;
 import com.ecommerce.productservice.model.Product;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -9,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class RabbitSavedProductEventProducerImpl implements SavedProductEventProducer {
+public class ProductEventProducer {
     private final RabbitTemplate rabbitTemplate;
 
     @Value("${ecommerce.rabbitmq.productsave.exchange}")
@@ -18,14 +17,25 @@ public class RabbitSavedProductEventProducerImpl implements SavedProductEventPro
     @Value("${ecommerce.rabbitmq.productsave.routingkey}")
     private String productSaveRoutingKey;
 
-    public RabbitSavedProductEventProducerImpl(RabbitTemplate rabbitTemplate) {
+    @Value("${ecommerce.rabbitmq.productdelete.exchange}")
+    private String productDeleteExchange;
+
+    @Value("${ecommerce.rabbitmq.productdelete.routingkey}")
+    private String productDeleteRoutingKey;
+
+    public ProductEventProducer(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    @Override
-    public void sendMessage(Product product) {
+    public void sendSavedProductEvent(Product product) {
         log.debug("Sending saved product event with data (data={})", product);
 
         rabbitTemplate.convertAndSend(productSaveExchange, productSaveRoutingKey, product);
+    }
+
+    public void sendDeletedProductEvent(String id) {
+        log.debug("Sending deleted product event by id (id={})", id);
+
+        rabbitTemplate.convertAndSend(productDeleteExchange, productDeleteRoutingKey, id);
     }
 }

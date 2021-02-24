@@ -1,8 +1,7 @@
 package com.ecommerce.productservice.service.impl;
 
 import com.ecommerce.productservice.exception.ProductNotFoundException;
-import com.ecommerce.productservice.integration.event.producer.product.DeletedProductEventProducer;
-import com.ecommerce.productservice.integration.event.producer.product.SavedProductEventProducer;
+import com.ecommerce.productservice.integration.event.product.ProductEventProducer;
 import com.ecommerce.productservice.model.Product;
 import com.ecommerce.productservice.repository.ProductRepository;
 import com.ecommerce.productservice.security.CurrentUser;
@@ -17,18 +16,12 @@ import java.time.LocalDateTime;
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
-    private final SavedProductEventProducer savedProductEventProducer;
-    private final DeletedProductEventProducer deletedProductEventProducer;
+    private final ProductEventProducer productEventProducer;
 
     @Autowired
-    public ProductServiceImpl(
-            ProductRepository productRepository,
-            SavedProductEventProducer savedProductEventProducer,
-            DeletedProductEventProducer deletedProductEventProducer
-    ) {
+    public ProductServiceImpl(ProductRepository productRepository, ProductEventProducer productEventProducer) {
         this.productRepository = productRepository;
-        this.savedProductEventProducer = savedProductEventProducer;
-        this.deletedProductEventProducer = deletedProductEventProducer;
+        this.productEventProducer = productEventProducer;
     }
 
     @Override
@@ -55,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
         product.setCreatedOn(LocalDateTime.now());
 
         Product savedProduct = productRepository.save(product);
-        savedProductEventProducer.sendMessage(savedProduct);
+        productEventProducer.sendSavedProductEvent(savedProduct);
 
         return savedProduct;
     }
@@ -70,7 +63,7 @@ public class ProductServiceImpl implements ProductService {
 
         product.setId(id);
         Product savedProduct = productRepository.save(product);
-        savedProductEventProducer.sendMessage(savedProduct);
+        productEventProducer.sendSavedProductEvent(savedProduct);
 
         return savedProduct;
     }
@@ -84,11 +77,6 @@ public class ProductServiceImpl implements ProductService {
         }
 
         productRepository.deleteById(id);
-        deletedProductEventProducer.sendMessage(id);
-    }
-
-    @Override
-    public void deleteProductsByUserId(String userId) {
-        productRepository.deleteAllByUserId(userId);
+        productEventProducer.sendDeletedProductEvent(id);
     }
 }

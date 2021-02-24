@@ -1,4 +1,4 @@
-package com.ecommerce.productservice.integration.event.producer.product.dto;
+package com.ecommerce.orderservice.integration.event.product.dto;
 
 import lombok.Data;
 
